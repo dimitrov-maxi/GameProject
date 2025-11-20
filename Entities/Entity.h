@@ -8,7 +8,7 @@
 
 
 class Entity {
-private:
+protected:
     short level = 1;
     char* name;
     double maxHealth = 100;

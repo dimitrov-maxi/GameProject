@@ -44,17 +44,20 @@ void runGame() {
             }
         }while (!playerActions[choice-1]->execute(p1, e1));
         if (e1.isAlive()) {
-            EntityBehaviour::entityFightBehaviour(e1)->execute(e1, p1);
-            // delete[]
+            auto action = EntityBehaviour::entityFightBehaviour(e1);
+            action->execute(e1, p1);
+            delete action;
+
             // int enemyChoice;
             // do {
             //     enemyChoice = rand() % 5;
             // }while (!playerActions[enemyChoice]->execute(e1, p1));
             counter++;
         }
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        std::cout<<"Press Enter to continue";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // to clean cin
+        std::cin.get();
         system("cls");
-        // std::this_thread::sleep_for(std::chrono::seconds(3));
     }
     if (p1.isAlive()) {
         std::cout << p1.getName()<<" has saved the princess";
