@@ -29,6 +29,7 @@ class Action;
 class CustomFunctions {
      public:
      static bool randomBool();
+     static Monster choseEnemy();
      static std::vector<std::string> listSaveFiles();
      static std::string getLocalIP();
 
