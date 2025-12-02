@@ -8,6 +8,8 @@
 
 
 class Monster:public Entity {
+public:
+    std::string getSaveLocation() override { return "Saves/Monsters/"; }
 };
 
 

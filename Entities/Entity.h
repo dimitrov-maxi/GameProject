@@ -10,7 +10,7 @@
 class Entity {
 protected:
     short level = 1;
-    char* name;
+    char* name = nullptr;
     double maxHealth = 100;
     double currentHealth = 100;
     double maxEnergy = 100;
@@ -26,7 +26,8 @@ protected:
 
 public:
     Entity();
-    void levelUp();
+    short getLevel();
+    void levelUp(bool silent = false);
     void heal(int health);
     void takeDamage(int damage);
     int attack(bool type);
@@ -42,6 +43,9 @@ public:
     double getMaxEnergy();
     void printStats();
     void gainExperience(double experienceGained);
+    void saveBinary(std::string filename);
+    void loadBinary(std::string filename);
+    virtual std::string getSaveLocation() { return "Saves/"; } // default
 };
 
 

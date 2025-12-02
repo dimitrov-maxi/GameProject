@@ -8,7 +8,8 @@
 
 
 class Player: public Entity {
+public:
+    std::string getSaveLocation() override { return "Saves/Players/"; }
 };
-
 
 #endif //GAMEPROJECT_PLAYER_H

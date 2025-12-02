@@ -6,9 +6,14 @@
 
 #include <cmath>
 #include <cstring>
+#include <fstream>
 #include <iostream>
 
 Entity::Entity(){};
+
+short Entity::getLevel() {
+    return level;
+}
 
 void Entity::heal(int amount) {
     if (maxHealth-currentHealth > amount) {
@@ -118,20 +123,81 @@ void Entity::printStats() {
         }
 
     }
-    std::cout << "]"<< currentEnergy <<"/"<<maxEnergy <<std::endl;
+    std::cout << "]"<< (int)currentEnergy <<"/"<<maxEnergy <<std::endl;
 }
 void Entity::gainExperience(double experienceGained) {
-    std::cout << name <<"has earned "<< experienceGained<< " Experience!"<<std::endl;
-    if (experienceGained>experienceToLevel) {
-
+    experience += experienceGained;
+    std::cout << name <<" has earned "<< experienceGained<< " Experience!"<<std::endl;
+    while (experience>=experienceToLevel) {
+        experience-=experienceToLevel;
+        levelUp();
     }
+    std::cout << experience << "out of " << experienceToLevel<<std::endl;
 }
-void Entity::levelUp() {
-    // std::cout << name<<"has gained a level and now is level: "<<level;
-    experienceToLevel = experienceToLevel*1.5;
+void Entity::levelUp(bool silent) {
+    level++;
+    if (!silent) {
+        std::cout << name<<" has gained a level and now is level: "<<level<<std::endl;
+    }
+    experienceToLevel = experienceToLevel*1.2;
     maxHealth = maxHealth*1.2;
     currentHealth = maxHealth;
     maxEnergy = maxEnergy*1.1;
     currentEnergy = maxEnergy;
     strength = strength*1.2;
+}
+void Entity::saveBinary(std::string filename){
+    std::ofstream file(getSaveLocation() + filename + ".bin", std::ios::binary);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file for saving: "
+                  << getSaveLocation() << filename << ".bin" << std::endl;
+        return;
+    }
+    file.write((char*)&level, sizeof(level));
+
+    short len = strlen(name);
+    file.write((char*)&len, sizeof(len));
+    file.write(name, len);
+
+    file.write((char*)&maxHealth, sizeof(maxHealth));
+    file.write((char*)&currentHealth, sizeof(currentHealth));
+    file.write((char*)&maxEnergy, sizeof(maxEnergy));
+    file.write((char*)&currentEnergy, sizeof(currentEnergy));
+    file.write((char*)&strength, sizeof(strength));
+    file.write((char*)&armor, sizeof(armor));
+    file.write((char*)&stance, sizeof(stance));
+    file.write((char*)&status, sizeof(status));
+    file.write((char*)&experience, sizeof(experience));
+    file.write((char*)&experienceToLevel, sizeof(experienceToLevel));
+    file.close();
+}
+void Entity::loadBinary(std::string filename){
+    std::ifstream file(getSaveLocation() + filename + ".bin", std::ios::binary);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file for saving: "
+                  << getSaveLocation() << filename << ".bin" << std::endl;
+        return;
+    }
+    file.read((char*)&level, sizeof(level));
+
+    short len;
+    file.read((char*)&len, sizeof(len));
+
+    char* buffer = new char[len + 1];
+    file.read(buffer, len);
+    buffer[len] = '\0';
+    setName(buffer);
+    delete[] buffer;
+
+    file.read((char*)&maxHealth, sizeof(maxHealth));
+    file.read((char*)&currentHealth, sizeof(currentHealth));
+    file.read((char*)&maxEnergy, sizeof(maxEnergy));
+    file.read((char*)&currentEnergy, sizeof(currentEnergy));
+    file.read((char*)&strength, sizeof(strength));
+    file.read((char*)&armor, sizeof(armor));
+    file.read((char*)&stance, sizeof(stance));
+    file.read((char*)&status, sizeof(status));
+    file.read((char*)&experience, sizeof(experience));
+    file.read((char*)&experienceToLevel, sizeof(experienceToLevel));
+    file.close();
 }

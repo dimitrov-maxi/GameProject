@@ -19,4 +19,9 @@ add_executable(GameProject main.cpp
         Utility/CustomFunctions.h
         Entities/EntityBehaviour.cpp
         Entities/EntityBehaviour.h
+        Utility/campaign.cpp
+        Utility/campaign.h
 )
+if(WIN32)
+    target_link_libraries(GameProject PRIVATE iphlpapi ws2_32)
+endif()
