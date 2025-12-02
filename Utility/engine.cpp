@@ -129,10 +129,10 @@ void runGame() {
             Player p2 = CustomFunctions::receivePlayer(socket);
             CustomFunctions::Fight(p,p2,true,socket,playerActions);
         }else {
-            // std::cout<<"Enter your buddy's IP:"<<std::endl;
-            // std::string ip;
-            // std::cin>>ip;
-            int socket = CustomFunctions::connectToHost("127.0.0.1");
+            std::cout<<"Enter your buddy's IP:"<<std::endl;
+            std::string ip;
+            std::cin>>ip;
+            int socket = CustomFunctions::connectToHost(ip);
             CustomFunctions::sendPlayer(socket, p);
             Player p2 = CustomFunctions::receivePlayer(socket);CustomFunctions::Fight(p,p2,false,socket,playerActions);
         }
