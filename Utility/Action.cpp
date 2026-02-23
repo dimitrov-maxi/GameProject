@@ -21,7 +21,6 @@ bool HeavyAttack::execute(Entity &user, Entity &target) {
         std::cout<<"Not enough energy!!!"<<std::endl;
         return 0;
     }
-
 }
 
 bool Heal::execute(Entity &user, Entity &target) {

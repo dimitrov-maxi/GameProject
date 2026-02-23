@@ -4,7 +4,7 @@
 
 class Action {
 public:
-    virtual bool execute(Entity &user, Entity &target) = 0; // pure virtual
+    virtual bool execute(Entity &user, Entity &target) = 0;
     virtual ~Action() = default;
 };
 
@@ -31,4 +31,4 @@ public:
     bool execute(Entity &user, Entity &target) override;
 };
 
-#endif //GAMEPROJECT_ACTIONS_H
+#endif

@@ -9,9 +9,6 @@
 #include <vector>
 #include <filesystem>
 #include <string>
-#include <cstring>
-#include <iostream>
-
 #include "Action.h"
 #include "../Entities/Player.h"
 
@@ -34,9 +31,7 @@ class CustomFunctions {
      static std::string getLocalIP();
 
      static void initNetwork();
-     static void cleanupNetwork();
      static void closeSocket(int sock);
-
      static bool convertIp(const std::string& ipStr, sockaddr_in& addr);
      static int startHost();
      static int connectToHost(const std::string &ip);

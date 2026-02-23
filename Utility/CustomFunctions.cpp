@@ -83,12 +83,6 @@ void CustomFunctions::initNetwork() {
 #endif
 }
 
-void CustomFunctions::cleanupNetwork() {
-#ifdef _WIN32
-    WSACleanup();
-#endif
-}
-
 void CustomFunctions::closeSocket(int sock) {
 #ifdef _WIN32
     closesocket(sock);
@@ -181,7 +175,6 @@ void CustomFunctions::sendAction(int sock, short action) {
     send(sock, reinterpret_cast<char *>(&networkValue), sizeof(networkValue), 0);
 }
 
-// Receive a short
 short CustomFunctions::receiveAction(int sock) {
     uint16_t networkValue = 0;
     int bytesReceived = recv(sock, reinterpret_cast<char *>(&networkValue), sizeof(networkValue), 0);

@@ -1,7 +1,3 @@
-//
-// Created by dimit on 11/8/2025.
-//
-
 #ifndef GAMEPROJECT_ENGINE_H
 #define GAMEPROJECT_ENGINE_H
 
@@ -11,4 +7,4 @@ class engine {
 };
 
 
-#endif //GAMEPROJECT_ENGINE_H
+#endif

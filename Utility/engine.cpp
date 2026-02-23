@@ -17,7 +17,15 @@ void runGame() {
     srand(time(nullptr));
     std::cout << "\n1. New game\n2. Load save" << std::endl;
     short newGame;
-    std::cin >> newGame;
+    while (true) {
+        if (std::cin >> newGame && (newGame == 1 || newGame == 2)) {
+            break;
+        }
+        std::cout << "Invalid choice!\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
     Player p;
     if (newGame == 1) {
         p = Player();
@@ -100,22 +108,20 @@ void runGame() {
                 system("cls");
             }
             if (p.isAlive()) {
-                std::cout << p.getName() << " has slain the enemy";
                 p.gainExperience(10 * (1.0 + m.getLevel() * 0.1));
-                std::this_thread::sleep_for(std::chrono::seconds(3));
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Do you want to save?(y/n)";
+                if (std::cin.get() == 'y') {
+                    p.saveBinary(p.getName());
+                }
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Do you want to continue?(y/n)";
+                if (std::cin.get() == 'n') {
+                    continueGame = false;
+                }
             } else {
                 std::cout << m.getName() << " has killed the hero";
                 std::this_thread::sleep_for(std::chrono::seconds(3));
-            }
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Do you want to save?(y/n)";
-            if (std::cin.get() == 'y') {
-                p.saveBinary(p.getName());
-            }
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Do you want to continue?(y/n)";
-            if (std::cin.get() == 'n') {
-                continueGame = false;
             }
         }
     } else if (multiplayer == 2) {
@@ -130,11 +136,12 @@ void runGame() {
         }
         if (hostOrClient == 'h') {
             bool yourTurn = true;
-            std::cout << "Device ip is:" << CustomFunctions::getLocalIP();
+            std::cout << "Device ip is:" << CustomFunctions::getLocalIP()<<std::endl;
             int socket = CustomFunctions::startHost();
             CustomFunctions::sendPlayer(socket, p);
             Player p2 = CustomFunctions::receivePlayer(socket);
             CustomFunctions::Fight(p, p2, true, socket, playerActions);
+            CustomFunctions::closeSocket(socket);
         } else {
             std::cout << "Enter your buddy's IP:" << std::endl;
             std::string ip;
@@ -143,6 +150,7 @@ void runGame() {
             CustomFunctions::sendPlayer(socket, p);
             Player p2 = CustomFunctions::receivePlayer(socket);
             CustomFunctions::Fight(p, p2, false, socket, playerActions);
+            CustomFunctions::closeSocket(socket);
         }
     }
 }
